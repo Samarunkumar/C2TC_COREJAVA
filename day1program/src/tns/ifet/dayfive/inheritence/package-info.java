@@ -1,0 +1,1 @@
+package tns.ifet.dayfive.inheritence;
