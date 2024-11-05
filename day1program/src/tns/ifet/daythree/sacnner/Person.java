@@ -9,7 +9,7 @@ public class Person {
 	public Person(String string, String string2) {
 		// TODO Auto-generated constructor stub
 	}
-	public Person() {
+	public Person(String string, String string2, int i, int j, String string3) {
 		// TODO Auto-generated constructor stub
 	}
 	//Getter and Setters
