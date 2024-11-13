@@ -34,7 +34,7 @@ public class ListDemo {
 		List<Point> pList=new ArrayList<Point>();
 		pList.add(p1);
 		pList.add(p2);
-		Collections.sort(pList);
+		Collections.sort((List<T>) pList);
 		
 		List<Student> studentList = new ArrayList<Student>();
 		Student s1 = new Student(11, "Pooja", 78);
