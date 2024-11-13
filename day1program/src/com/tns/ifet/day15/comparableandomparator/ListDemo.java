@@ -34,7 +34,7 @@ public class ListDemo {
 		List<Point> pList=new ArrayList<Point>();
 		pList.add(p1);
 		pList.add(p2);
-		Collections.sort((List<T>) pList);
+		Collections.sort(pList);
 		
 		List<Student> studentList = new ArrayList<Student>();
 		Student s1 = new Student(11, "Pooja", 78);
@@ -58,17 +58,17 @@ public class ListDemo {
 
 		// Adding Person objects into ArrayList
 		List<Person> personList = new ArrayList<Person>();
-		Person p1 = new Person("Abhijit", "Mumbai");
-		personList.add(p1);
+		Person p11 = new Person("Abhijit", "Mumbai");
+		personList.add(p11);
 
-		p1 = new Person("Milind", "Pune");
-		personList.add(p1);
+		p11 = new Person("Milind", "Pune");
+		personList.add(p11);
 
-		p1 = new Person("Saurav", "Bangalore");
-		personList.add(p1);
+		p11 = new Person("Saurav", "Bangalore");
+		personList.add(p11);
 
-		p1 = new Person("Madhur", "Delhi");
-		personList.add(p1);
+		p11 = new Person("Madhur", "Delhi");
+		personList.add(p11);
 
 		System.out.println("Person list is as follows\n" + personList);
 
