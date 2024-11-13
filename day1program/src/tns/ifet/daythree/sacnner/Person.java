@@ -6,10 +6,10 @@ public class Person {
 	private String gender;
 	private int age;
 	private int tax;
-	public Person(String string, String string2) {
+	public Person() {
 		// TODO Auto-generated constructor stub
 	}
-	public Person(String string, String string2, int i, int j, String string3) {
+	public Person() {
 		// TODO Auto-generated constructor stub
 	}
 	//Getter and Setters
