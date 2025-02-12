@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff; /* Light Blue Background */
+            margin: 0;
+            padding: 0;
+            background-image: url('https://www.example.com/background-image.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+            color: #333;
+        }
+        h2 {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 123, 255, 0.7); /* Blue background with transparency */
+            color: white;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #28a745; /* Green for Add/Update */
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .delete-btn {
+            background-color: #dc3545; /* Red for Delete */
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .form-container {
+            margin-bottom: 30px;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 200px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .header-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Image -->
+    <img src="https://www.example.com/header-image.jpg" class="header-image" alt="Customer Management">
+
+    <div class="container">
+        <h2>Customer Management System</h2>
+
+        <!-- Form for adding/updating a customer -->
+        <div class="form-container">
+            <input type="hidden" id="customerId">
+            <input type="text" id="customerName" placeholder="Customer Name" required>
+            <input type="email" id="customerEmail" placeholder="Customer Email" required>
+            <button onclick="addOrUpdateCustomer()">Add/Update Customer</button>
+        </div>
+
+        <!-- Customer Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="customerTableBody">
+                <!-- Customer rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const apiBaseUrl = "http://localhost:8080/customers";
+
+        // Fetch and display customers
+        function fetchCustomers() {
+            fetch(apiBaseUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById("customerTableBody");
+                    tableBody.innerHTML = ""; // Clear table before adding new data
+
+                    data.forEach(customer => {
+                        let row = `<tr>
+                            <td>${customer.id}</td>
+                            <td>${customer.name}</td>
+                            <td>${customer.email}</td>
+                            <td>
+                                <button onclick="editCustomer(${customer.id}, '${customer.name}', '${customer.email}')">Edit</button>
+                                <button onclick="deleteCustomer(${customer.id})" class="delete-btn">Delete</button>
+                            </td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error fetching customers:", error));
+        }
+
+        // Add or Update Customer
+        function addOrUpdateCustomer() {
+            const id = document.getElementById("customerId").value; // Get the customer ID (if editing)
+            const name = document.getElementById("customerName").value; // Get the name
+            const email = document.getElementById("customerEmail").value; // Get the email
+
+            // Validate input
+            if (!name || !email) {
+                alert("Please enter name and email.");
+                return; // Don't proceed if name or email is empty
+            }
+
+            const customerData = { name, email }; // Create the customer data object
+
+            const method = id ? "PUT" : "POST"; // Use PUT if updating, otherwise POST
+            const url = id ? `${apiBaseUrl}/${id}` : apiBaseUrl; // API URL for update or create
+
+            // Send the request to the backend
+            fetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(customerData) // Send the customer data as JSON
+            })
+            .then(response => response.json())
+            .then(() => {
+                // Clear input fields and reload the customers list
+                document.getElementById("customerId").value = "";
+                document.getElementById("customerName").value = "";
+                document.getElementById("customerEmail").value = "";
+                fetchCustomers();
+            })
+            .catch(error => console.error("Error saving customer:", error)); // Log errors if any
+        }
+
+        // Edit Customer (pre-fill form)
+        function editCustomer(id, name, email) {
+            document.getElementById("customerId").value = id;
+            document.getElementById("customerName").value = name;
+            document.getElementById("customerEmail").value = email;
+        }
+
+        // Delete Customer
+        function deleteCustomer(id) {
+            if (!confirm("Are you sure you want to delete this customer?")) return;
+
+            fetch(`${apiBaseUrl}/${id}`, { method: "DELETE" })
+                .then(() => fetchCustomers())
+                .catch(error => console.error("Error deleting customer:", error));
+        }
+
+        // Load customers when the page loads
+        fetchCustomers();
+    </script>
+
+</body>
+</html>
